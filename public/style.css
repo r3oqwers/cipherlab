@@ -1,0 +1,190 @@
+:root {
+  --accent: #00ffa3;
+  --bg: #070912;
+  --glass: rgba(16, 20, 38, 0.72);
+  --line: rgba(255, 255, 255, 0.09);
+  --text: #e8ecf8;
+  --muted: #8b93ad;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 0%, #151a3a, var(--bg) 60%);
+  color: var(--text);
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+#rain { position: fixed; inset: 0; width: 100%; height: 100%; opacity: 0.28; z-index: 0; }
+.wrap { position: relative; z-index: 1; max-width: 1150px; margin: 0 auto; padding: 28px 16px 48px; }
+
+header { text-align: center; margin-bottom: 22px; }
+.logo { font-size: 2.4rem; font-weight: 800; letter-spacing: 1px; }
+.logo span { color: var(--accent); text-shadow: 0 0 18px var(--accent); }
+.sub { color: var(--muted); margin: 4px 0 12px; }
+
+.dots { display: flex; gap: 10px; justify-content: center; }
+.dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #fff3; cursor: pointer; padding: 0; transition: transform 0.2s; }
+.dot:hover { transform: scale(1.25); }
+
+.tabs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+.tab {
+  padding: 10px 20px; font: inherit; font-weight: 600; color: var(--muted);
+  background: var(--glass); border: 1px solid var(--line); border-radius: 30px; cursor: pointer;
+  transition: all 0.2s;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: #000; background: var(--accent); border-color: var(--accent); box-shadow: 0 0 20px -2px var(--accent); }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.glass {
+  background: var(--glass); backdrop-filter: blur(14px);
+  border: 1px solid var(--line); border-radius: 16px; padding: 22px;
+  box-shadow: 0 10px 40px #0006;
+}
+
+label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--muted); margin-bottom: 14px; }
+label b { color: var(--accent); }
+input[type="text"], select, textarea {
+  display: block; width: 100%; margin-top: 6px; padding: 10px 12px;
+  font: inherit; font-weight: 400; color: var(--text);
+  background: rgba(0, 0, 0, 0.35); border: 1px solid var(--line); border-radius: 10px;
+}
+option { background: #10142a; }
+textarea { resize: vertical; font-family: Consolas, monospace; }
+#output { color: var(--accent); }
+input[type="range"] { width: 100%; margin-top: 8px; accent-color: var(--accent); }
+input:focus, select:focus, textarea:focus { outline: 1px solid var(--accent); box-shadow: 0 0 12px -2px var(--accent); }
+label.check { display: flex; align-items: center; gap: 8px; font-weight: 400; cursor: pointer; }
+label.check input { accent-color: var(--accent); }
+
+.buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+button { font: inherit; }
+.buttons button {
+  padding: 10px 16px; font-weight: 600; color: #000; background: var(--accent);
+  border: none; border-radius: 10px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+}
+.buttons button:hover { transform: translateY(-2px); box-shadow: 0 6px 18px -4px var(--accent); }
+.buttons button.ghost { color: var(--text); background: transparent; border: 1px solid var(--line); }
+.buttons button.ghost:hover { border-color: var(--accent); box-shadow: none; }
+
+h3 { margin: 0 0 8px; font-size: 1.05rem; }
+.hint { color: var(--muted); font-size: 0.85rem; }
+.step { font-family: Consolas, monospace; word-break: break-all; }
+
+/* Колесо Цезаря */
+.wheel {
+  position: relative; width: 340px; height: 340px; margin: 14px auto;
+  border-radius: 50%; border: 1px solid var(--line); box-shadow: 0 0 30px -8px var(--accent);
+}
+.ring { position: absolute; inset: 0; }
+.ring.inner { transition: transform 0.6s cubic-bezier(0.3, 1.4, 0.5, 1); }
+.ring .l {
+  position: absolute; left: 50%; top: 50%; width: 24px; height: 24px; margin: -12px 0 0 -12px;
+  text-align: center; line-height: 24px; font-weight: 700; font-size: 14px;
+}
+.inner .l { color: var(--accent); font-size: 13px; }
+.hub {
+  position: absolute; inset: 0; margin: auto; width: 84px; height: 84px; border-radius: 50%;
+  display: grid; place-content: center; text-align: center; background: #0008; border: 1px solid var(--accent);
+}
+.hub small { color: var(--muted); }
+.hub b { font-size: 1.8rem; color: var(--accent); }
+
+/* Таблиці */
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; margin: 8px 0; font-family: Consolas, monospace; }
+th, td { border: 1px solid var(--line); padding: 6px 12px; min-width: 38px; text-align: center; }
+thead th { background: rgba(255, 255, 255, 0.06); color: var(--accent); }
+thead th.num { color: var(--muted); font-weight: 400; }
+td { animation: pop 0.35s both; }
+@keyframes pop { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: none; } }
+
+/* Криптоаналіз */
+.chart { display: flex; align-items: flex-end; gap: 2px; height: 150px; margin: 10px 0; }
+.bar { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
+.bar i { display: block; width: 80%; background: #5b6590; border-radius: 3px 3px 0 0; min-height: 2px; }
+.bar.top i { background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+.bar span { font-size: 10px; color: var(--muted); margin-top: 3px; }
+.brute { max-height: 260px; overflow: auto; }
+.brute table { width: 100%; }
+tr[data-k] { cursor: pointer; }
+tr[data-k]:hover { background: rgba(255, 255, 255, 0.07); }
+tr.best td { color: var(--accent); font-weight: 700; }
+td.left { text-align: left; }
+
+#toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translate(-50%, 80px);
+  background: var(--accent); color: #000; padding: 10px 22px; border-radius: 30px;
+  font-weight: 600; opacity: 0; transition: 0.3s; z-index: 5;
+}
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+@media (max-width: 400px) { .wheel { transform: scale(0.85); } }
+/* ===================== Перемикач лабораторних ===================== */
+.labs-nav {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid var(--line);
+}
+.lab-btn {
+  padding: 8px 20px; font: inherit; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.5px;
+  color: var(--muted); background: transparent; border: 1px solid var(--line);
+  border-radius: 10px; cursor: pointer; transition: all 0.2s;
+}
+.lab-btn:hover { color: var(--text); }
+.lab-btn.active { color: var(--accent); border-color: var(--accent); box-shadow: 0 0 14px -4px var(--accent); }
+
+/* ===================== Лабораторна 2 ===================== */
+.lab > .glass, .lab > .grid { margin-bottom: 20px; }
+input[type="password"] {
+  display: block; width: 100%; margin-top: 6px; padding: 10px 12px;
+  font: inherit; font-weight: 400; color: var(--text);
+  background: rgba(0, 0, 0, 0.35); border: 1px solid var(--line); border-radius: 10px;
+}
+input[type="password"]:focus { outline: 1px solid var(--accent); box-shadow: 0 0 12px -2px var(--accent); }
+
+/* Схема автентифікації */
+.flow {
+  list-style: none; margin: 10px 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px;
+}
+.flow li {
+  padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px;
+  color: var(--muted); font-size: 0.88rem; transition: all 0.3s;
+}
+.flow li b {
+  display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 8px;
+  border-radius: 50%; background: rgba(255, 255, 255, 0.1);
+}
+.flow li.done, .flow li.current { color: var(--text); }
+.flow li.done b, .flow li.current b { background: var(--accent); color: #000; }
+.flow li.current { border-color: var(--accent); box-shadow: 0 0 18px -6px var(--accent); }
+
+/* Токен */
+.jwt {
+  font-family: Consolas, monospace; font-size: 0.85rem; line-height: 1.5; word-break: break-all;
+  padding: 12px; margin-bottom: 12px; background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--line); border-radius: 10px;
+}
+.jwt.empty { color: var(--muted); font-family: inherit; }
+#lab2 .h { color: #fb7185; }
+#lab2 .p { color: #c084fc; }
+#lab2 .s { color: #38bdf8; }
+
+/* Таймер дії токена */
+.progress { height: 8px; border-radius: 6px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.progress i { display: block; height: 100%; width: 100%; background: var(--accent); transition: width 0.25s linear; }
+#l2-timer.expired .progress i { background: #fb7185; }
+
+/* Блоки виводу */
+pre.out {
+  margin: 0 0 14px; padding: 12px; font-family: Consolas, monospace; font-size: 0.85rem;
+  white-space: pre-wrap; word-break: break-word; color: var(--muted);
+  background: rgba(0, 0, 0, 0.4); border: 1px solid var(--line); border-radius: 10px;
+}
+pre.out.ok  { color: var(--accent); border-color: var(--accent); }
+pre.out.bad { color: #fb7185; border-color: #fb7185; }

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CipherLab — Лабораторні роботи</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="rain"></canvas>
+
+  <div class="wrap">
+    <header>
+      <div class="logo"> Cipher<span>Lab</span></div>
+      <p class="sub">Лабораторні роботи з захисту інформації</p>
+      <div class="dots" title="Колір теми">
+        <button class="dot" data-color="#00ffa3" style="background:#00ffa3"></button>
+        <button class="dot" data-color="#38bdf8" style="background:#38bdf8"></button>
+        <button class="dot" data-color="#c084fc" style="background:#c084fc"></button>
+        <button class="dot" data-color="#fb7185" style="background:#fb7185"></button>
+      </div>
+    </header>
+
+    <!-- Перемикач лабораторних: для нової лаби додайте тут кнопку -->
+    <nav class="labs-nav">
+      <button class="lab-btn active" data-lab="lab1">Лаб 1 · Шифри</button>
+      <button class="lab-btn" data-lab="lab2">Лаб 2 · JWT</button>
+    </nav>
+
+    <!-- ===================== ЛАБ 1 ===================== -->
+    <div class="lab" id="lab1">
+      <nav class="tabs">
+        <button class="tab active" data-tab="caesar"> Цезар</button>
+        <button class="tab" data-tab="trans"> Перестановка</button>
+        <button class="tab" data-tab="combo"> Комбо</button>
+        <button class="tab" data-tab="analysis"> Криптоаналіз</button>
+      </nav>
+
+      <main class="grid">
+        <section class="glass">
+          <div id="box-caesar">
+            <label>Мова алфавіту
+              <select id="lang">
+                <option value="uk">Українська (33 літери)</option>
+                <option value="en">English (26 letters)</option>
+              </select>
+            </label>
+            <label id="k-wrap">Ключ K: <b id="kval">3</b>
+              <input type="range" id="key" min="1" max="32" value="3">
+            </label>
+          </div>
+
+          <div id="box-trans" hidden>
+            <label>Ключове слово
+              <input type="text" id="word" value="Шифр">
+            </label>
+            <label class="check"><input type="checkbox" id="nospaces"> Видаляти пробіли перед шифруванням</label>
+          </div>
+
+          <label>Вхідний текст
+            <textarea id="input" rows="5" placeholder="Введіть текст..."></textarea>
+          </label>
+
+          <div class="buttons">
+            <button id="btn-enc"> Зашифрувати</button>
+            <button id="btn-dec"> Дешифрувати</button>
+            <button id="btn-an" hidden> Аналізувати</button>
+            <button id="btn-sample" class="ghost"> Приклад</button>
+          </div>
+
+          <label class="check" id="live-wrap"><input type="checkbox" id="live">  Live-режим (результат оновлюється під час набору)</label>
+
+          <label>Результат
+            <textarea id="output" rows="5" readonly></textarea>
+          </label>
+
+          <div class="buttons">
+            <button id="btn-copy" class="ghost"> Копіювати</button>
+            <button id="btn-swap" class="ghost"> Результат у вхід</button>
+            <button id="btn-dl" class="ghost"> .txt</button>
+            <button id="btn-clear" class="ghost"> Очистити</button>
+          </div>
+        </section>
+
+        <section class="glass" id="viz"></section>
+      </main>
+    </div>
+
+    <!-- ===================== ЛАБ 2 ===================== -->
+    <div class="lab" id="lab2" hidden>
+      <section class="glass">
+        <h3>Схема автентифікації з JWT</h3>
+        <ol class="flow" id="l2-flow">
+          <li data-s="1"><b>1</b> Клієнт надсилає логін і пароль</li>
+          <li data-s="2"><b>2</b> Сервер перевіряє SHA-256 хеш і видає JWT</li>
+          <li data-s="3"><b>3</b> Клієнт додає токен до запиту: Authorization: Bearer …</li>
+          <li data-s="4"><b>4</b> Сервер перевіряє підпис і термін дії → доступ дозволено</li>
+        </ol>
+      </section>
+
+      <div class="grid">
+        <section class="glass">
+          <h3>1. Авторизація на /login</h3>
+          <p class="hint">Basic Auth: пароль хешується SHA-256 і порівнюється з хешем у «базі».</p>
+          <label>Логін
+            <input type="text" id="l2-login" value="Voznyi">
+          </label>
+          <label>Пароль
+            <input type="password" id="l2-pass" value="Mykhailo">
+          </label>
+          <div class="buttons">
+            <button id="l2-check"> Перевірити /login</button>
+            <button id="l2-open" class="ghost">↗ /login у новій вкладці</button>
+          </div>
+          <pre class="out" id="l2-login-out">Результат з'явиться тут</pre>
+
+          <h3>2. JWT-токен</h3>
+          <div class="buttons">
+            <button id="l2-token"> Отримати токен</button>
+            <button id="l2-protected"> GET /protected</button>
+            <button id="l2-noauth" class="ghost"> Без токена</button>
+            <button id="l2-tamper" class="ghost"> Зіпсувати підпис</button>
+            <button id="l2-jwtio" class="ghost"> Копіювати й jwt.io</button>
+          </div>
+        </section>
+
+        <section class="glass">
+          <h3>Токен</h3>
+          <div id="l2-token-box" class="jwt empty">Токен ще не згенеровано</div>
+
+          <div id="l2-timer" hidden>
+            <div class="progress"><i id="l2-bar"></i></div>
+            <p class="hint" id="l2-left"></p>
+          </div>
+
+          <div id="l2-decoded" hidden>
+            <h3 class="h">Header</h3>
+            <pre class="out" id="l2-header"></pre>
+            <h3 class="p">Payload</h3>
+            <pre class="out" id="l2-payload"></pre>
+            <h3 class="s">Signature</h3>
+            <pre class="out">HMACSHA256(
+  base64UrlEncode(header) + "." +
+  base64UrlEncode(payload),
+  secret)</pre>
+          </div>
+
+          <h3>Відповідь сервера</h3>
+          <pre class="out" id="l2-prot-out">—</pre>
+        </section>
+      </div>
+
+      <section class="glass">
+        <h3>Калькулятор SHA-256</h3>
+        <p class="hint">Тут можна порахувати хеш пароля, щоб записати його в users.js.</p>
+        <label>Текст
+          <input type="text" id="l2-sha-in" placeholder="Наприклад, ваше ім'я">
+        </label>
+        <pre class="out" id="l2-sha-out">—</pre>
+      </section>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+  <script src="script.js"></script>
+  <script src="labs.js"></script>
+  <script src="lab2.js"></script>
+</body>
+</html>
